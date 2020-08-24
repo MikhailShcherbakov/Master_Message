@@ -1,15 +1,19 @@
 Attribute VB_Name = "SavedPerson"
+Option Explicit
+
 Sub SavedPerson()
-Attribute SavedPerson.VB_Description = "Копирует сохраненного в лист SavedPersons и помечает в рабочем листе имя зеленым цветом Ctrl+e"
+Attribute SavedPerson.VB_Description = "Сохраняет абитуриента в одтельный лист и помечает зеленым цветом"
 Attribute SavedPerson.VB_ProcData.VB_Invoke_Func = "e\n14"
-'добавляет в лист сохранненных абитуриентов
+'добавляет абитуриента в лист сохранненных,
+' помечая его зеленым цветом
+    
     Application.ScreenUpdating = False
     
     If Correct.CorrectCell And Correct.CorrectSheets Then
         
         
         Dim lLastRow As Long, c As Range
-        lLastRow = Worksheets("SavedPersons").Cells(Rows.Count, 1).End(xlUp).Row + 1
+        lLastRow = Worksheets("SavedPersons").Cells(rows.Count, 1).End(xlUp).Row + 1
         Set c = Worksheets("SavedPersons").Cells(lLastRow, 1)
         
         If c.Offset(-1, 2).value <> Date Then _

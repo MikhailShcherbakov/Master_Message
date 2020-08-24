@@ -24,7 +24,7 @@ Public Property Get Caption() As String
     Caption = strCaption
 End Property
 
-Private Property Let Caption(value As String)
+Public Property Let Caption(value As String)
     strCaption = value
 End Property
 

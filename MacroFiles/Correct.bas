@@ -24,9 +24,22 @@ Function CorrectSheets() As Boolean
     If Err.number = 9 Then
         
         Sheets.Add(after:=Sheets(Sheets.Count)).Name = "SavedPersons"
+        ActiveSheet.Cells(1, 1).value = "ФИО"
+        ActiveSheet.Cells(1, 2).value = "Доп Информ"
+        ActiveSheet.Cells(1, 3).value = "Дата добавления"
         
     End If
     
     CorrectSheets = True
     
+End Function
+
+Function CorrectSheet() As Boolean
+
+    If ActiveSheet.Name = "WorkList" Then
+        CorrectSheet = True
+    Else
+        CorrectSheet = False
+    End If
+
 End Function

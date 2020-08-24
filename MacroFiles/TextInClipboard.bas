@@ -6,16 +6,19 @@ Attribute TextInClipboard.VB_Description = "Записывает в буфер обмена письмо с и
 Attribute TextInClipboard.VB_ProcData.VB_Invoke_Func = "q\n14"
 'Ctrl+q Записывает в Буфер обмена полный текст письма
 'с просьбой выслать все необходимые документы
+    Application.OnKey "^{q}"
     Application.ScreenUpdating = False
     
-    If Correct.CorrectCell Then
+    If Correct.CorrectCell And Correct.CorrectSheet Then
         
-        Dim infWord As New Collection
-        infWord.Add "Все"
-        Dim FileName As Collection
-        FileName.Add "AllDocuments"
-        MessageInClipBoard.SetMessage FileName, infLabel:=infWord
-    
+        Dim obj As New clsMessage
+        
+        obj.Caption = "Все"
+        obj.Name = "AllDocuments"
+        
+        Dim c As New Collection
+        c.Add obj
+        MessageInClipBoard.SetMessage c
     End If
     
     Application.ScreenUpdating = True

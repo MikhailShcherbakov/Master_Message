@@ -2,21 +2,25 @@ Attribute VB_Name = "UpdateWorklist"
 Option Explicit
 
 Sub Update_WorkList()
-Attribute Update_WorkList.VB_Description = "Обновляет рабочий лист на основе нового скачаного файла"
+Attribute Update_WorkList.VB_Description = "Обновляет рабочий лист на основе нового скачаного файла, копирует только данные, имена абитуриентов которых начинаются на мои литеры (С, Т, У)"
 Attribute Update_WorkList.VB_ProcData.VB_Invoke_Func = " \n14"
-'   Процедура обновляет рабочий лист
+'   Обновляет рабочий лист на основе нового файла, имя которого настоящая дата, нпрм, "22.08.2020"
+'   копирует только данные с именами абитуриентов,
+'   которые начинаются на литеры (С, Т, У)
+
     Application.ScreenUpdating = False
     
     Dim objWorkList As Worksheet, objExport As Worksheet
     
     Set objWorkList = ActiveWorkbook.Worksheets("WorkList")
     Set objExport = Worksheets(CopyNewSheetInWork(ActiveWorkbook))
+
     
     Dim strName As String, objFindRange As Range, objColumn As Range, objExColumn As Range
     
     Dim i&, strExport As String, lLastExRow As Long
     objExport.Activate
-    lLastExRow = Range("A1").CurrentRegion.Rows.Count
+    lLastExRow = Range("A1").CurrentRegion.rows.Count
     
     For i = 2 To lLastExRow
     
@@ -64,6 +68,7 @@ Function CopyNewSheetInWork(GeneralBook As Workbook) As String
                 ("Excel files(*.xls*), *.xls*", 1, "Выбрать Excel файл", , MultiSelect:=False)
             
             If VarType(vbFile) = vbBoolean Then
+                CopyNewSheetInWork = ""
                 Exit Function
             Else
                 
@@ -87,7 +92,7 @@ Function FindRangeInWork(strName As String, i As Long) As Range
     If IsMyFistLetter(strName) Then
         With Sheets("WorkList")
             
-            lLastRow = .Cells(1, 1).CurrentRegion.Rows.Count
+            lLastRow = .Cells(1, 1).CurrentRegion.rows.Count
             Set objFindRange = .Range("A1:A" & CStr(lLastRow)).Find(strName)
             
             If objFindRange Is Nothing Then
@@ -108,6 +113,7 @@ Function FindRangeInWork(strName As String, i As Long) As Range
 End Function
 
 Function IsMyFistLetter(str As String) As Boolean
+'Копирует слова только моих литер
     Dim IsMyLetter As Boolean
     IsMyFistLetter = (Left(str, 1) = "С") Or (Left(str, 1) = "Т") Or (Left(str, 1) = "У")
 End Function
@@ -115,13 +121,13 @@ End Function
 Sub CopyRow(i As Long)
 '   процедура копирует строку из Export in WorkList
 
-    Dim LastRow As Long
-    LastRow = Sheets("WorkList").Range("A1").End(xlDown).Row + 1
+    Dim lastRow As Long
+    lastRow = Sheets("WorkList").Range("A1").End(xlDown).Row + 1
     'objExport.Range(objExCell.Address, "K" & CStr(i)).Copy
 '    Range("A" & CStr(i), "K" & CStr(i)).Copy _
 '        Sheets("WorkList").Range("A" & strLastWorkRow)
     Range(Cells(i, 1), Cells(i, 11)).Copy _
-        Sheets("WorkList").Cells(LastRow, 1)
+        Sheets("WorkList").Cells(lastRow, 1)
     
 End Sub
 'objExp As Worksheet DELETE

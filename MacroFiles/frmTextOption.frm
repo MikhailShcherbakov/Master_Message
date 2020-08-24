@@ -17,12 +17,17 @@ Attribute VB_Exposed = False
 
 
 
-Dim number As Integer
-Public words As Collection, FilesName As Collection
-Const subscription As String = "С уважением," + vbCrLf + "Информационный центр магистратуры СПбГУ по направлениям ""Филология"" и ""Лингвистика"""
 
+Dim number As Integer
+Const Subscription As String = "С уважением," + vbCrLf + "Информационный центр магистратуры СПбГУ по направлениям ""Филология"" и ""Лингвистика"""
+
+
+Private Sub ChPassport_Click()
+
+End Sub
 
 Private Sub CommandButton1_Click()
+'подготавливает данные для сборки письма
 
     Dim Frames As New Collection, item As Control
     For Each item In frmTextOption.Controls
@@ -39,10 +44,8 @@ Private Sub CommandButton1_Click()
         Exit Sub
         
     Else
-    
-        Set words = Get_Words(Fr)
-        Set FilesName = Get_FilesName(Fr)
-        Call SetMessage(FilesName, words)
+        
+        MessageInClipBoard.SetMessage Get_Objects(Fr)
         
     End If
     
@@ -50,12 +53,13 @@ Private Sub CommandButton1_Click()
 End Sub
 
 Function Get_Frame(Frames As Collection) As frame
-    Dim i&, j&
+'возвращает корректную рамку
     
+    Dim i&, j&
     For i = 1 To Frames.Count
-        If (Get_Words(Frames(i)).Count <> 0) And (i <> Frames.Count) Then
+        If Value_Controls(Frames(i)) And (i <> Frames.Count) Then
             For j = i + 1 To Frames.Count
-                If Get_Words(Frames(j)).Count <> 0 Then
+                If Value_Controls(Frames(j)) Then
                 
                     Set Get_Frame = Nothing
                     Cls_frames Frames
@@ -77,7 +81,23 @@ Function Get_Frame(Frames As Collection) As frame
     
 End Function
 
+Function Value_Controls(frame As frame) As Boolean
+    '
+    Dim item As Control
+    For Each item In frame.Controls
+        If item.value Then
+        
+            Value_Controls = True
+            Exit Function
+            
+        End If
+    Next
+    
+    Value_Controls = False
+End Function
+
 Sub Cls_frames(Frames As Collection)
+'очищает все рамки
     Dim frame As frame
     For Each frame In Frames
         Dim contr As Control
@@ -88,44 +108,39 @@ Sub Cls_frames(Frames As Collection)
         Next
     Next
 End Sub
-Function Get_Words(frame As frame) As Collection
-    Dim item As Control
-    Dim words As New Collection
-    
-    For Each item In frame.Controls
-        If item.value Then
-        
-            words.Add (item.Caption)
-            
-        End If
-    Next
-    
-    Set Get_Words = words
-End Function
 
-Function Get_FilesName(f As frame) As Collection
-    Dim item As Control
-    Dim FilesName As New Collection
+
+Function Get_Objects(f As frame) As Collection
+'return clsMessage
+
+    Dim item As Control, objColl As New Collection
+    Dim obj As clsMessage
     
     For Each item In f.Controls
-        If item.value And InStr(item.Name, "1st") <> 0 Then
-            If FilesName.Count = 0 Then
-            
-                FilesName.Add item.Name
+        If item.value And InStr(item.Name, "1st") > 0 Then
+            If objColl.Count = 0 Then
+                
+                Set obj = New clsMessage
+                obj.Init item
+                objColl.Add obj, Key:=obj.Name
             
             Else
                 
-                FilesName.Add item.Name, Before:=1
+                Set obj = New clsMessage
+                obj.Init item
+                objColl.Add obj, Key:=obj.Name, Before:=1
             
             End If
         ElseIf item.value Then
             
-            FilesName.Add item.Name
+            Set obj = New clsMessage
+            obj.Init item
+            objColl.Add obj, Key:=obj.Name
         
         End If
     Next
     
-    Set Get_FilesName = FilesName
+    Set Get_Objects = objColl
 End Function
 
 Private Sub LastMessage1st_Click()
@@ -214,3 +229,6 @@ Sub Send_Massege(txt As String)
     Set oCDOMsg = Nothing: Set oCDOCnf = Nothing
 End Sub
 
+Private Sub UserForm_Click()
+
+End Sub
