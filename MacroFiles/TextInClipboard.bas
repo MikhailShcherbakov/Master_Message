@@ -2,19 +2,20 @@ Attribute VB_Name = "TextInClipboard"
 Option Explicit
 
 Sub TextInClipboard()
-Attribute TextInClipboard.VB_Description = "Записывает в буфер обмена письмо с именем и отчеством абитур-нта из выделенной ячейки  Ctrl + q"
+Attribute TextInClipboard.VB_Description = "Г‡Г ГЇГЁГ±Г»ГўГ ГҐГІ Гў ГЎГіГґГҐГ° Г®ГЎГ¬ГҐГ­Г  ГЇГЁГ±ГјГ¬Г® Г± ГЁГ¬ГҐГ­ГҐГ¬ ГЁ Г®ГІГ·ГҐГ±ГІГўГ®Г¬ Г ГЎГЁГІГіГ°-Г­ГІГ  ГЁГ§ ГўГ»Г¤ГҐГ«ГҐГ­Г­Г®Г© ГїГ·ГҐГ©ГЄГЁ  Ctrl + q"
 Attribute TextInClipboard.VB_ProcData.VB_Invoke_Func = "q\n14"
-'Ctrl+q Записывает в Буфер обмена полный текст письма
-'с просьбой выслать все необходимые документы
+'Ctrl+q Г‡Г ГЇГЁГ±Г»ГўГ ГҐГІ Гў ГЃГіГґГҐГ° Г®ГЎГ¬ГҐГ­Г  ГЇГ®Г«Г­Г»Г© ГІГҐГЄГ±ГІ ГЇГЁГ±ГјГ¬Г 
+'Г± ГЇГ°Г®Г±ГјГЎГ®Г© ГўГ»Г±Г«Г ГІГј ГўГ±ГҐ Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г»ГҐ Г¤Г®ГЄГіГ¬ГҐГ­ГІГ»
     Application.ScreenUpdating = False
     
     If Correct.CorrectCell Then
         
-        Dim infWord As New Collection
-        infWord.Add "Все"
-        Dim FileName As Collection
-        FileName.Add "AllDocuments"
-        MessageInClipBoard.SetMessage FileName, infLabel:=infWord
+        obj.Caption = "Г‚Г±ГҐ"
+        obj.Name = "AllDocuments"
+        
+        Dim c As New Collection
+        c.Add obj
+        MessageInClipBoard.SetMessage c
     
     End If
     
